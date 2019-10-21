@@ -1,15 +1,21 @@
 --type字串说明,1: text 2:image  3:video 4: file
 
-select description 
-from xs_schedule_head 
-where id in(
+select XS_S_H.description ,XS_S_H.id as 'SHID', com.id as 'COMID',com.name as COMNM
+from xs_schedule_head AS XS_S_H 
+LEFT JOIN `xs_equipment_schedule` AS EQS on EQS.schedule_head_id = XS_S_H.id
+LEFT JOIN `xs_company` AS com on EQS.company_id = com.id
+
+where XS_S_H.id in(
 	select schedule_head_id 
 	from xs_equipment_schedule 
 	where equipment_id in (
 		select id 
 		from xs_equipment 
 		where player_type = 3
-		and company_id NOT IN ('773','1908','1945','2102','2205','2463','2503','2510','2557','2691','2866','3000','3095','3123',
+		) 
+	or tag_id is not null
+	)
+and  com.id NOT IN ('2080','773','1908','1945','2102','2205','2463','2503','2510','2557','2691','2866','3000','3095','3123',
                           '2202','2368','2196','2199','2203','2204','1955','2511','2611','2458','2461','2472','2069','2099','2269','2311','2451','2192'
                           ,'2193','2269','2206','2694','2669','2193','1837','1511','2263','1907','2263','1930','1940','1','3','31','34','35','141','142',
                           '145','146','147','148','149','150','152','220','233','237','238','239','241','244','245','248','249','250','252','253','254','259','261','267',
@@ -37,9 +43,5 @@ where id in(
                           '3259','3269','3278','3305','3310','3311','3330','3346','3353','3358','3376','3396','3405','3407','3409','3428','3431',
                           '3437','3439','3474','3475','3520','3542','3551','3624','3696','3697','1588','2149','2559','2824','2826','2970','3249','3515','3516','3552'
 )
-
-		) 
-	or tag_id is not null
-	)
 	
 	
